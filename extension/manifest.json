@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Feed Quiet for Facebook",
+  "version": "1.1.0",
+  "description": "Quiet your Facebook feed with optional filters for Reels, Stories, ads, suggestions, videos, keywords and more.",
+  "minimum_chrome_version": "109",
+  "permissions": ["storage"],
+  "icons": { "16": "icons/icon-16.png", "32": "icons/icon-32.png", "48": "icons/icon-48.png", "128": "icons/icon-128.png" },
+  "action": {
+    "default_title": "Feed Quiet", "default_popup": "popup.html",
+    "default_icon": { "16": "icons/icon-16.png", "32": "icons/icon-32.png", "48": "icons/icon-48.png" }
+  },
+  "content_scripts": [{
+    "matches": ["https://www.facebook.com/*", "https://facebook.com/*", "https://m.facebook.com/*"],
+    "js": ["rules.js", "content.js"],
+    "css": ["content.css"],
+    "run_at": "document_start"
+  }]
+}
