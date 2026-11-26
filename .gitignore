@@ -1,2 +1,5 @@
 node_modules/
 dist/
+store-assets/*-raw.png
+store-assets/*.html
+store-assets/*.zip

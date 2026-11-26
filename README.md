@@ -1,6 +1,24 @@
 # Feed Quiet for Facebook
 
+<img src="store-assets/store-icon-128.png" alt="Feed Quiet icon" width="80" height="80">
+
 A Chrome extension with independent switches for a quieter feed. **Hide Reels** and **Hide Stories** remain first and keep their existing settings (on for a fresh installation). All additional filters and Pause filtering default to **off**. Preferences are saved on the device and changes apply to open Facebook tabs.
+
+**Chrome Web Store:** Submitted for review. You can install the extension locally while review is pending.
+
+## Screenshots
+
+### Reels and Stories
+
+![Feed Quiet popup with separate Reels and Stories switches](store-assets/01-screenshot.png)
+
+### Optional filters
+
+![Additional filters for sponsored posts, suggestions, people, groups, and videos, all off by default](store-assets/02-screenshot.png)
+
+### Keyword filtering
+
+![Keyword configuration with example phrases saved locally](store-assets/03-screenshot.png)
 
 ### Additional filters
 
@@ -16,8 +34,7 @@ After updating, reload the extension at `chrome://extensions` and refresh Facebo
 
 1. Open `chrome://extensions` in Chrome.
 2. Turn on **Developer mode** (top right).
-3. Click **Load unpacked** and select the `extension` folder inside this project:
-   `C:\Users\talay\facebook-feed-control\extension`
+3. Click **Load unpacked** and select the `extension` folder inside your downloaded or cloned copy of this project.
 4. Refresh any Facebook tabs already open.
 5. Pin **Feed Quiet for Facebook** from Chrome's Extensions menu, then click it to choose what to hide.
 
@@ -58,10 +75,34 @@ Additional filters are best-effort: ads with obfuscated labels, unrecognized tra
 | `extension/manifest.json` | Manifest V3 configuration and site scope |
 | `extension/rules.js` | Preferences and DOM detection rules |
 | `extension/content.js` | Mutation observation, hiding/restoring, media pausing |
-| `extension/popup.*` | Accessible two-switch popup |
+| `extension/popup.*` | Accessible filter switches, keyword configuration, and presets |
 | `tests/extension.test.cjs` | Detection, lifecycle, storage, and popup tests |
 
 The implementation follows Chrome's [content script documentation](https://developer.chrome.com/docs/extensions/develop/concepts/content-scripts) and [storage API](https://developer.chrome.com/docs/extensions/reference/api/storage).
+
+## Store graphics
+
+The finished assets are available in [store-assets](store-assets). Screenshots and promo tiles are 24-bit RGB PNGs without transparency.
+
+| Asset | Dimensions | File |
+| --- | --- | --- |
+| Store icon | 128 × 128 | [PNG](store-assets/store-icon-128.png) |
+| Reels and Stories screenshot | 1280 × 800 | [PNG](store-assets/01-screenshot.png) |
+| Additional filters screenshot | 1280 × 800 | [PNG](store-assets/02-screenshot.png) |
+| Keyword filtering screenshot | 1280 × 800 | [PNG](store-assets/03-screenshot.png) |
+| Small promo tile | 440 × 280 | [PNG](store-assets/small-promo-440x280.png) |
+| Marquee promo tile | 1400 × 560 | [PNG](store-assets/marquee-1400x560.png) |
+
+![Feed Quiet promotional banner](store-assets/marquee-1400x560.png)
+
+To regenerate graphics on Windows with Google Chrome installed at its default location, run after `npm ci`:
+
+```powershell
+node scripts/store-assets.cjs
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/render-store-assets.ps1
+```
+
+Screenshots show the actual popup UI rendered with example settings. Generated HTML previews and intermediate images are excluded from Git.
 
 ## Manual acceptance checks
 
@@ -74,4 +115,4 @@ Automated tests use representative fixtures, not a live authenticated Facebook f
 5. Test a second Facebook tab, keyboard navigation in the popup, and relevant interface languages.
 6. Confirm hidden Reels do not continue playing audio. Report missed content with a sanitized DOM snippet so detection can be updated without private feed data.
 
-This project is ready to load locally. It is not published to the Chrome Web Store and has not been validated against a live signed-in Facebook feed. Store distribution requires a developer account, listing assets, privacy disclosures, and review. This is an independent project, unaffiliated with Meta or Facebook.
+This project is ready to load locally and has been submitted to the Chrome Web Store for review. Approval is pending. It has not been validated against a live signed-in Facebook feed. This is an independent project, unaffiliated with Meta or Facebook.
