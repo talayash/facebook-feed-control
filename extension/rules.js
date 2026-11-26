@@ -45,6 +45,7 @@
     return null;
   }
   const isBoundary = element => element.matches("html, body, main, [role='main'], [role='feed'], [role='navigation']");
+  const POST_SELECTOR = 'article, [role="article"], [data-pagelet^="FeedUnit"]';
   function safeContainer(element) {
     return !isBoundary(element) && !element.querySelector("main, [role='main'], [role='feed']") &&
       element.querySelectorAll("[role='article']").length <= 1;
@@ -60,6 +61,7 @@
     }
     // Hide compact shelves that have a feature heading and matching content links.
     for (const heading of document.querySelectorAll("h1, h2, h3, h4, [role='heading']")) {
+      if (heading.closest(POST_SELECTOR)) continue;
       const kind = labelKind(heading.textContent);
       if (!enabled(kind)) continue;
       let parent = heading.parentElement;
@@ -81,15 +83,26 @@
       if (!enabled(kind)) continue;
       let target = link;
       // A plain text mention/link should not remove the surrounding ordinary post.
-      const article = link.closest("[role='article']");
-      if (kind === "reels" && article && safeContainer(article) &&
-          (link.querySelector("video, img") || article.querySelector("video") ||
-            labelKind(link.getAttribute("aria-label")) === "reels")) {
-        target = article;
-      } else if (!article) {
+      const article = link.closest(POST_SELECTOR);
+      if (article) {
+        // Facebook uses Story links on author avatars. Never remove a Story
+        // link or a plain Reel mention from inside an otherwise ordinary post.
+        if (kind === "stories") continue;
+        const inHeader = link.closest('header, [role="heading"], h1, h2, h3, h4');
+        if (!inHeader && safeContainer(article) && link.querySelector('video, img, [role="img"]')) {
+          targets.add(article);
+        }
+        continue;
+      } else {
         const item = link.closest("[role='listitem']");
         if (item && safeContainer(item) && [...item.querySelectorAll("a[href]")].every(other =>
           linkKind(other.getAttribute("href"), document.URL) === kind)) target = item;
+        // Unmarked layouts can contain Story-linked avatars too. Media links
+        // are only hidden inside an already identified shelf, a labeled region,
+        // or an explicit feature navigation link; a URL alone is insufficient.
+        if (link.querySelector('img, svg, video, [role="img"]') &&
+            ![...targets].some(container => container.contains(link)) &&
+            labelKind(link.getAttribute('aria-label')) !== kind) continue;
       }
       targets.add(target);
     }

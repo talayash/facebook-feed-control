@@ -59,7 +59,7 @@ test('hides media reel posts, while preserving ordinary posts with text links', 
     <div role="article" id="ordinary-video"><video></video><a href="/videos/4">Video</a></div></div>`);
   assert.ok(result.includes('video-post'));
   assert.ok(result.includes('image-post'));
-  assert.ok(result.includes('mention'));
+  assert.ok(!result.includes('mention'));
   assert.ok(!result.includes('text-post'));
   assert.ok(!result.includes('ordinary-video'));
 });
@@ -69,7 +69,7 @@ test('localized labels and language-independent URLs work', () => {
 });
 test('a shelf heading cannot hide a whole feed of unrelated articles', () => {
   const result = targets('<div id="outer"><h2>Reels</h2><div role="article">Normal</div><div role="article"><a id="link" href="/reel/1">Link</a></div></div>');
-  assert.deepEqual(result, ['link']);
+  assert.deepEqual(result, []);
 });
 test('content script filters inserts, restores on toggles, and rechecks recycled nodes', async t => {
   const dom = page(fixture);

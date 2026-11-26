@@ -66,7 +66,9 @@ npm test
 npm run package
 ```
 
-Runtime code has no third-party dependencies. `jsdom` is a development-only dependency for DOM and popup integration tests. Packaging creates `dist/feed-quiet-1.1.0.zip` with only installable extension files.
+Runtime code has no third-party dependencies. `jsdom` is a development-only dependency for DOM and popup integration tests. Packaging creates `dist/feed-quiet-1.1.1.zip` with only installable extension files.
+
+Version 1.1.1 preserves Story-linked author avatars and images in ordinary posts, and avoids hiding plain Reel mentions. Ambiguous standalone media links are left visible unless a recognized feature container or label identifies them. This favors preserving ordinary post content when Facebook's layout is unclear.
 
 Additional filters are best-effort: ads with obfuscated labels, unrecognized translations, suggestion panels without semantic containers, and unfamiliar video layouts may be missed. Automated fixtures cover each filter; live authenticated Facebook verification is still required.
 
